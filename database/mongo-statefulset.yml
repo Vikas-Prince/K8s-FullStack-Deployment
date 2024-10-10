@@ -27,7 +27,9 @@ spec:
           image: mongo:5.0
           ports:
             - containerPort: 5721
-
+          volumeMounts:
+            - mountPath: /data/db
+              name: mongo-volume
           resources:
             limits:
               memory: "150Mib"
@@ -35,7 +37,6 @@ spec:
             requests:
               memory: "200Mib"
               cpu: "200m"
-
           livenessProbe:
             exec:
               command:
@@ -46,7 +47,6 @@ spec:
                 - "db.runCommand({ ping: 1})"
             initialDelaySeconds: 30
             periodSeconds: 10
-
           readinessProbe:
             exec:
               command:
@@ -57,15 +57,19 @@ spec:
                 - "db.runCommand({ ping: 1 })"
             initialDelaySeconds: 30
             periodSeconds: 10
-
           env:
             - name: MONGO_INITDB_ROOT_USERNAME
               valueFrom:
                 secretKeyRef:
                   name: mongo-secret
-                  key:  mongo-user
+                  key: mongo-user
             - name: MONGO_INITDB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: mongo-secret
                   key: mongo-pass
+
+      volumes:
+        - name: mongo-volume
+          persistentVolumeClaim:
+            claimName: mongo-pvc
