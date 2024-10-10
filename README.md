@@ -1,30 +1,76 @@
 # MERN Stack Application Deployment on Kubernetes
 
-This repository contains deployment configurations for a MERN stack application using Kubernetes on a Minikube cluster.
+This repository contains deployment configurations for a MERN stack application using Kubernetes on a Minikube cluster. This project utilizes official Docker images for MongoDB **mongo**, for UI by using Node and express **mongo-express**, enabling CRUD operations with a simple setup.
 
 ## Prerequisites
 
 Before deploying the application, you need to install **Minikube** and **kubectl** on your system. Follow the steps below for installation on **Red Hat** or **Amazon Linux**.
 
+## Kubernetes Resources Used in Deployment
+
+This deployment utilizes the following Kubernetes resources:
+
+- **Deployment**: Manages the Mongo Express application deployment, ensuring the desired number of replicas.
+
+- **StatefulSet**: Used for managing MongoDB instances, providing stable network identities and persistent storage.
+
+- **Horizontal Pod Autoscaler**: Automatically scales the number of Mongo Express pods based on CPU utilization.
+
+- **Service**: Exposes both MongoDB and Mongo Express applications, enabling communication between them and external access.
+
+- **Secrets**: Stores sensitive data, such as MongoDB credentials, securely.
+
+- **ConfigMaps**: Manages configuration data for Mongo Express, allowing for dynamic configuration updates.
+
+- **Persistent Volume (PV)**: Represents storage resources for MongoDB data, ensuring data persistence.
+
+- **Persistent Volume Claim (PVC)**: Requests storage resources defined by the Persistent Volume for MongoDB.
+
+- **Namespaces**: Organizes resources within a specific namespace for better management and isolation.
+
+- **Readiness Probes**: Checks the readiness of Mongo Express pods before routing traffic to them.
+
+- **Liveness Probes**: Monitors the health of Mongo Express pods to ensure they are running properly.
+
+- **Resource Quota**: Limits the resource usage for the namespace to prevent resource contention.
+
+- **Deployment Strategies**: Defines how updates are applied to the deployment, ensuring minimal downtime.
+
+- **Replicas**: Specifies the number of pod replicas for both MongoDB and Mongo Express to ensure availability.
+
+These resources work together to provide a robust, scalable, and maintainable deployment for the MERN stack application.
+
 ## Installation Steps
 
-### 1. Install Minikube
+### 1. Install Docker
+
+Minikube uses a container runtime (like Docker) to run Kubernetes components and the applications deployed within the cluster. The container runtime is responsible for building, running, and managing containers.
+
+```bash
+yum install docker -y
+systemctl start docker
+```
+
+### 2. Install Minikube
 
 Run the following commands to install Minikube:
 
 ```bash
 # Download the Minikube RPM package
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-latest.x86_64.rpm
+
 # Install the Minikube RPM
 rpm -Uvh minikube-latest.x86_64.rpm
+
 # Start Minikube (use --force to overwrite existing configurations if necessary)
 minikube start --force
 ```
 
-### 2. Install Kubectl
+### 3. Install Kubectl
+
 Next, install kubectl with the following commands:
 
-```bash 
+```bash
 # Download the kubectl binary
 curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.28.3/2023-11-14/bin/linux/amd64/kubectl
 
@@ -36,11 +82,91 @@ cp ./kubectl /usr/bin/
 
 ```
 
-- After installing Minikube and kubectl, you can proceed to deploy the MERN stack application. Please refer to the deployment instructions in this repository.
+## Deployment Instructions
 
-## Download the repository
+- After installing Minikube and kubectl, you can proceed to deploy the MERN stack application:
+
+### 1. Download the repository
 
 ```bash
 git clone https://github.com/Vikas-Prince/K8s-FullStack-Deployment.git
 cd K8s-FullStack-Deployment
 ```
+
+### 2. Create a Namespace
+
+```bash
+kubectl apply -f namespace.yml
+```
+
+### 3. Apply Persistent Volume and Persistent Volume Claim
+
+First, apply the persistent volume and persistent volume claim for MongoDB:
+
+```bash
+cd database
+kubectl apply -f persistent-volume.yml
+kubectl apply -f persistent-volume-claim.yml
+```
+
+### 4. Apply Secrets
+
+Next, create the secrets for MongoDB:
+
+```bash
+kubectl apply -f mongo-secret.yml
+```
+
+### 5. Apply ConfigMaps
+
+Apply the ConfigMap for Mongo Express:
+
+```bash
+kubectl apply -f mongo-config.yml
+```
+
+### 6. Deploy MongoDB
+
+Now, deploy the MongoDB StatefulSet and Service:
+
+```bash
+kubectl apply -f mongo-statefulset.yml
+kubectl apply -f mongo-service.yaml
+```
+
+### 7. Deploy Mongo Express
+
+Deploy the Mongo Express Deployment and Service:
+
+```bash
+kubectl apply -f mongo-express-deployment.yaml
+kubectl apply -f mongo-express-service.yaml
+```
+
+### 8. Apply Horizontal Pod Autoscaler
+
+If using autoscaling for Mongo-Express, apply the Horizontal Pod Autoscaler:
+
+```bash
+kubectl apply -f mongo-express-hpa.yaml
+```
+
+### 9. Verify Deployments and Services
+Check the status of your deployments and services to ensure everything is running correctly:
+
+```bash
+kubectl get pods -n mernstack
+kubectl get services -n mernstack
+```
+
+### 10. Access Mongo Express
+To access the Mongo Express web interface, run socat :
+
+```bash
+chmod +x socat.sh
+./socat.sh
+```
+
+## Conclusion
+Following these steps, you should have successfully deployed MongoDB and Mongo Express on your minikube cluster. You can now access the Mongo Express web interface to interact with your MongoDB database.
+
