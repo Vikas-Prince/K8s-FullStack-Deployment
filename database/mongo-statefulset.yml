@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo-db
+  namespace: mernstack
+  author: vikas
+  labels:
+    app: mongo-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mongodb-pod
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      name: mongo-db
+      labels:
+        app: mongodb-pod
+    spec:
+      containers:
+        - name: mongodb-container
+          image: mongo:5.0
+          ports:
+            - containerPort: 5721
+
+          resources:
+            limits:
+              memory: "150Mib"
+              cpu: "150m"
+            requests:
+              memory: "200Mib"
+              cpu: "200m"
+
+          livenessProbe:
+            exec:
+              command:
+                - mongo
+                - --host
+                - localhost
+                - --eval
+                - "db.runCommand({ ping: 1})"
+            initialDelaySeconds: 30
+            periodSeconds: 10
+
+          readinessProbe:
+            exec:
+              command:
+                - mongo
+                - --host
+                - localhost
+                - --eval
+                - "db.runCommand({ ping: 1 })"
+            initialDelaySeconds: 30
+            periodSeconds: 10
+
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key:  mongo-user
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: mongo-pass
