@@ -148,14 +148,14 @@ kubectl apply -f mongo-express-service.yaml
 To enable Horizontal Pod Autoscaling (HPA) for Mongo-Express, you must first ensure that the Metrics Server is properly set up in your Kubernetes cluster. The Metrics Server is crucial as it collects resource metrics from Kubelets and provides them to the HPA.
 
 1. **Install Metrics Server**
-   Run the following command to apply the Metrics Server configuration:
+   - Run the following command to apply the Metrics Server configuration:
 
 ```bash
 kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 ```
 
 2. **Modify Metrics Server Deployment**
-   After installing the Metrics Server, you may need to modify its deployment to allow insecure TLS communication with Kubelets. To do this, run:
+   - After installing the Metrics Server, you may need to modify its deployment to allow insecure TLS communication with Kubelets. To do this, run:
 
 ```bash
 kubectl edit deployment metrics-server -n kube-system
@@ -166,6 +166,12 @@ kubectl edit deployment metrics-server -n kube-system
 ```bash
 --kubelet-insecure-tls
 --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
+```
+
+- After modification we need to restart the metric server
+
+```bash
+kubectl rollout restart deployment metrics-server -n kube-system
 ```
 
 Once the Metrics Server is set up, you can apply the HPA configuration for Mongo-Express. Create a file named mongo-express-hpa.yaml with the desired configuration, then run:
