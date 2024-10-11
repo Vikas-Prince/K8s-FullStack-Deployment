@@ -3,19 +3,14 @@ kind: StatefulSet
 metadata:
   name: mongo-db
   namespace: mernstack
-  author: vikas
   labels:
     app: mongo-app
+    author: vikas
 spec:
   replicas: 2
   selector:
     matchLabels:
       app: mongodb-pod
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
   template:
     metadata:
       name: mongo-db
@@ -24,19 +19,19 @@ spec:
     spec:
       containers:
         - name: mongodb-container
-          image: mongo:5.0
+          image: mongo
           ports:
-            - containerPort: 5721
+            - containerPort: 27017
           volumeMounts:
             - mountPath: /data/db
               name: mongo-volume
-          resources:
-            limits:
-              memory: "150Mib"
-              cpu: "150m"
-            requests:
-              memory: "200Mib"
-              cpu: "200m"
+          # resources:
+          #   limits:
+          #     memory: "512Mi"
+          #     cpu: "500m"
+          #   requests:
+          #     memory: "1Gi"
+          #     cpu: "1"
           livenessProbe:
             exec:
               command:

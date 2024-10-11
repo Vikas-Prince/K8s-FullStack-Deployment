@@ -9,3 +9,11 @@ spec:
     - ReadWriteMany
   local:
     path: /storage/mongo
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - minikube

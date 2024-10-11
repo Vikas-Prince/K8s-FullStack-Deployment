@@ -1,12 +1,12 @@
-# This is a deployment file for deploying UI
+# This is a deployment file for deploying client side
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontend
   namespace: mernstack
-  author: Vikas
   labels:
     app: frontend
+    author: Vikas
 spec:
   replicas: 2
   selector:
@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
         - name: frontend-container
-          image: mongo-express:latest
+          image: mongo-express
           ports:
             - containerPort: 8081
           env:
@@ -44,22 +44,22 @@ spec:
                 configMapKeyRef:
                   name: mongo-config
                   key: mongo-service-name
-          resources:
-            limits:
-              memory: "100Mib"
-              cpu: "150m"
-            requests:
-              memory: "150Mib"
-              cpu: "200m"
+          # resources:
+          #   limits:
+          #     memory: "100Mi"
+          #     cpu: "150m"
+          #   requests:
+          #     memory: "150Mi"
+          #     cpu: "200m"
           livenessProbe:
             httpGet:
               path: /
               port: 8081
-              initialDelaySeconds: 30
-              periodSeconds: 5
+            initialDelaySeconds: 30
+            periodSeconds: 5
           readinessProbe:
             httpGet:
               path: /
               port: 8081
-              initialDelaySeconds: 30
-              periodSeconds: 5
+            initialDelaySeconds: 30
+            periodSeconds: 5
