@@ -145,13 +145,37 @@ kubectl apply -f mongo-express-service.yaml
 
 ### 8. Apply Horizontal Pod Autoscaler
 
-If using autoscaling for Mongo-Express, apply the Horizontal Pod Autoscaler:
+To enable Horizontal Pod Autoscaling (HPA) for Mongo-Express, you must first ensure that the Metrics Server is properly set up in your Kubernetes cluster. The Metrics Server is crucial as it collects resource metrics from Kubelets and provides them to the HPA.
+
+1. **Install Metrics Server**
+   Run the following command to apply the Metrics Server configuration:
+
+```bash
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+```
+
+2. **Modify Metrics Server Deployment**
+   After installing the Metrics Server, you may need to modify its deployment to allow insecure TLS communication with Kubelets. To do this, run:
+
+```bash
+kubectl edit deployment metrics-server -n kube-system
+```
+
+- In the editor, find the spec.containers.args section and modify it to include the following:
+
+```bash
+--kubelet-insecure-tls
+--kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
+```
+
+Once the Metrics Server is set up, you can apply the HPA configuration for Mongo-Express. Create a file named mongo-express-hpa.yaml with the desired configuration, then run:
 
 ```bash
 kubectl apply -f mongo-express-hpa.yaml
 ```
 
 ### 9. Verify Deployments and Services
+
 Check the status of your deployments and services to ensure everything is running correctly:
 
 ```bash
@@ -160,6 +184,7 @@ kubectl get services -n mernstack
 ```
 
 ### 10. Access Mongo Express
+
 To access the Mongo Express web interface, run socat :
 
 ```bash
@@ -168,5 +193,5 @@ chmod +x socat.sh
 ```
 
 ## Conclusion
-Following these steps, you should have successfully deployed MongoDB and Mongo Express on your minikube cluster. You can now access the Mongo Express web interface to interact with your MongoDB database.
 
+Following these steps, you should have successfully deployed MongoDB and Mongo-Express on your minikube cluster. You can now access the Mongo Express web interface to interact with your MongoDB database.
