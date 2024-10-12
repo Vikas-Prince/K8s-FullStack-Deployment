@@ -189,14 +189,24 @@ kubectl get pods -n mernstack
 kubectl get services -n mernstack
 ```
 
-### 10. Access Mongo Express
+### 10. Accessing Mongo Express
 
-To access the Mongo Express web interface, run socat :
+To access the Mongo Express web interface, follow these steps:
+
+1. **Run the `socat` script:**
+   Make sure the script is executable, and then execute it with the following commands:
 
 ```bash
-chmod +x socat.sh
-./socat.sh
+   chmod +x socat.sh
+   ./socat.sh
 ```
+
+2. **Access the Application:**
+   - Once the script is running, you can access the Mongo Express interface via your public IP and the designated port.
+   
+3. **Login Credentials**
+   - **Username:** admin
+   - **Password:** pass
 
 ## Conclusion
 
