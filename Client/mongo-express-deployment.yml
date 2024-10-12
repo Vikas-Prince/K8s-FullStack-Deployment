@@ -51,15 +51,16 @@ spec:
           #   requests:
           #     memory: "150Mi"
           #     cpu: "200m"
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 8081
-            initialDelaySeconds: 30
-            periodSeconds: 5
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 8081
-            initialDelaySeconds: 30
-            periodSeconds: 5
+          # as of now probes are not work because there is a authentication for this web so we need to create custom endpoint to check health
+          # livenessProbe:
+          #   httpGet:
+          #     path: /health
+          #     port: 8081
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 5
+          # readinessProbe:
+          #   httpGet:
+          #     path: /health
+          #     port: 8081
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 5

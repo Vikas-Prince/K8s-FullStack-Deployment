@@ -32,26 +32,26 @@ spec:
           #   requests:
           #     memory: "1Gi"
           #     cpu: "1"
-          livenessProbe:
-            exec:
-              command:
-                - mongo
-                - --host
-                - localhost
-                - --eval
-                - "db.runCommand({ ping: 1})"
-            initialDelaySeconds: 30
-            periodSeconds: 10
-          readinessProbe:
-            exec:
-              command:
-                - mongo
-                - --host
-                - localhost
-                - --eval
-                - "db.runCommand({ ping: 1 })"
-            initialDelaySeconds: 30
-            periodSeconds: 10
+          # livenessProbe:
+          #   exec:
+          #     command:
+          #       - mongo
+          #       - --host
+          #       - localhost
+          #       - --eval
+          #       - "db.runCommand({ ping: 1})"
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 10
+          # readinessProbe:
+          #   exec:
+          #     command:
+          #       - mongo
+          #       - --host
+          #       - localhost
+          #       - --eval
+          #       - "db.runCommand({ ping: 1 })"
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 10
           env:
             - name: MONGO_INITDB_ROOT_USERNAME
               valueFrom:
