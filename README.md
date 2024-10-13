@@ -213,6 +213,14 @@ To access the Mongo Express web interface, follow these steps:
    - **Username:** admin
    - **Password:** pass
 
+### 11. Application Web View
+
+You can access the web view of your application by visiting the public IP of your server with respective port.
+
+- Below is a screenshot of the application after successful deployment via Kubernetes.
+
+![Web view](snapshots/mernstackapp.png)
+
 ## Conclusion
 
 Following these steps, you should have successfully deployed MongoDB and Mongo-Express on your minikube cluster. You can now access the Mongo Express web interface to interact with your MongoDB database.
