@@ -2,10 +2,6 @@
 
 This repository contains deployment configurations for a MERN stack application using Kubernetes on a Minikube cluster. This project utilizes official Docker images for MongoDB **mongo**, for UI by using Node and express **mongo-express**, enabling CRUD operations with a simple setup.
 
-## Prerequisites
-
-Before deploying the application, you need to install **Minikube** and **kubectl** on your system. Follow the steps below for installation on **Red Hat** or **Amazon Linux**.
-
 ## Kubernetes Resources Used in Deployment
 
 This deployment utilizes the following Kubernetes resources:
@@ -39,6 +35,15 @@ This deployment utilizes the following Kubernetes resources:
 - **Replicas**: Specifies the number of pod replicas for both MongoDB and Mongo Express to ensure availability.
 
 These resources work together to provide a robust, scalable, and maintainable deployment for the MERN stack application.
+
+## Architecture
+
+Below is the architecture of this application, illustrating its key components and how they interact.
+![Architecture](snapshots/k8s%20architect.png)
+
+## Prerequisites
+
+Before deploying the application, you need to install **Minikube** and **kubectl** on your system. Follow the steps below for installation on **Red Hat** or **Amazon Linux**.
 
 ## Installation Steps
 
@@ -203,7 +208,6 @@ To access the Mongo Express web interface, follow these steps:
 
 2. **Access the Application:**
    - Once the script is running, you can access the Mongo Express interface via your public IP and the designated port.
-   
 3. **Login Credentials**
    - **Username:** admin
    - **Password:** pass
