@@ -39,6 +39,7 @@ These resources work together to provide a robust, scalable, and maintainable de
 ## Architecture
 
 Below is the architecture of this application, illustrating its key components and how they interact.
+
 ![Architecture](snapshots/k8s%20architect.png)
 
 ## Prerequisites
