@@ -44,23 +44,23 @@ spec:
                 configMapKeyRef:
                   name: mongo-config
                   key: mongo-service-name
-          # resources:
-          #   limits:
-          #     memory: "100Mi"
-          #     cpu: "150m"
-          #   requests:
-          #     memory: "150Mi"
-          #     cpu: "200m"
-          # as of now probes are not work because there is a authentication for this web so we need to create custom endpoint to check health
-          # livenessProbe:
-          #   httpGet:
-          #     path: /health
-          #     port: 8081
-          #   initialDelaySeconds: 30
-          #   periodSeconds: 5
-          # readinessProbe:
-          #   httpGet:
-          #     path: /health
-          #     port: 8081
-          #   initialDelaySeconds: 30
-          #   periodSeconds: 5
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+            requests:
+              memory: "550Mi"
+              cpu: "250m"
+          
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8081
+            initialDelaySeconds: 30
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8081
+            initialDelaySeconds: 30
+            periodSeconds: 5

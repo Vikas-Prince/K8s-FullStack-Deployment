@@ -7,7 +7,7 @@ metadata:
     app: mongo-app
     author: vikas
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: mongodb-pod
@@ -25,33 +25,14 @@ spec:
           volumeMounts:
             - mountPath: /data/db
               name: mongo-volume
-          # resources:
-          #   limits:
-          #     memory: "512Mi"
-          #     cpu: "500m"
-          #   requests:
-          #     memory: "1Gi"
-          #     cpu: "1"
-          # livenessProbe:
-          #   exec:
-          #     command:
-          #       - mongo
-          #       - --host
-          #       - localhost
-          #       - --eval
-          #       - "db.runCommand({ ping: 1})"
-          #   initialDelaySeconds: 30
-          #   periodSeconds: 10
-          # readinessProbe:
-          #   exec:
-          #     command:
-          #       - mongo
-          #       - --host
-          #       - localhost
-          #       - --eval
-          #       - "db.runCommand({ ping: 1 })"
-          #   initialDelaySeconds: 30
-          #   periodSeconds: 10
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "1"
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+
           env:
             - name: MONGO_INITDB_ROOT_USERNAME
               valueFrom:
